@@ -4,7 +4,15 @@ import matplotlib.pyplot as plt
 import datetime
 import json
 import os, sys
+import pymongo #yDGTNy2WK52Bqsm
 
+
+client = pymongo.MongoClient("mongodb+srv://lol:yDGTNy2WK52Bqsm@cluster0-gijx9.mongodb.net/test?retryWrites=true&w=majority")
+#db = client.test
+
+db = client["bcdata"]
+dlong = db["60d"]
+dshort = db["kd"]
 
 
 #dataY = yf.download("BTC-USD",period="1y",interval="1d")
@@ -101,19 +109,18 @@ for name in names:
 		#print("{ "+str(d)+"; "+str(k)+"};")
 	
 	
-		json_build = {}
-		json_build["scrape_id"] = name+"@"+startdate.strftime('%m_%d_%Y')
-		json_build["month_array"] = values
-		json_build["output"] = {"k":k,"d":d}
-	
-		values_json = json.dumps(json_build)
-	
-		dump_file.write(values_json+";")
+		
+		scrape_id = name+"@"+startdate.strftime('%m_%d_%Y')
+
+		sdate = datetime.datetime.combine(startdate, datetime.datetime.min.time())
+
+		dlong.insert_one({"scrape_id":scrape_id,"coin":name,"date":sdate,"values":values})
+
+		dshort.insert_one({"scrape_id":scrape_id,"coin":name,"date":sdate,"values":{"k":k,"d":d}})
+
 	
 		startdate = startdate - datetime.timedelta(days=1)
 
 		plt.plot(t_array,trendpoly(t_array))
 	
-	dump_file.close()
 
-plt.show()
