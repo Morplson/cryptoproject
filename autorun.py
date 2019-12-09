@@ -60,8 +60,6 @@ def scraper():
 
 
 
-
-
 schedule.every().day.at("12:00").do(scraper)
 
 if __name__ == '__main__':
