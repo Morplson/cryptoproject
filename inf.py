@@ -7,60 +7,6 @@ import os, sys
 
 
 
-#dataY = yf.download("BTC-USD",period="1y",interval="1d")
-#dataM = yf.download("BTC-USD",period="1mo",interval="1d")
-#dataW = yf.download("BTC-USD",period="5d",interval="60m")
-#dataD = yf.download("BTC-USD",period="1d",interval="1m")
-#
-#
-### Year Trend
-#y = dataY.Close.to_numpy().tolist()
-#time = dataY.index.values.tolist()
-#
-#plt.plot(time,y)
-#
-#
-#trend = np.polyfit(time,y,1)
-#trendpoly = np.poly1d(trend) 
-#yy, = plt.plot(time,trendpoly(time),label="year")
-#
-### Month Trend
-#y = dataM.Close.to_numpy().tolist()
-#time = dataM.index.values.tolist()
-#
-#plt.plot(time,y)
-#
-#
-#trend = np.polyfit(time,y,1)
-#trendpoly = np.poly1d(trend) 
-#m, = plt.plot(time,trendpoly(time),label="month")
-#
-### Week Trend
-#y = dataW.Close.to_numpy().tolist()
-#time = dataW.index.values.tolist()
-#
-#plt.plot(time,y)
-#
-#
-#trend = np.polyfit(time,y,1)
-#trendpoly = np.poly1d(trend) 
-#w, = plt.plot(time,trendpoly(time),label="week")
-#
-#
-### Day Trend
-#y = dataD.Close.to_numpy().tolist()
-#time = dataD.index.values.tolist()
-#
-#plt.plot(time,y)
-#
-#
-#trend = np.polyfit(time,y,1)
-#trendpoly = np.poly1d(trend) 
-#d, = plt.plot(time,trendpoly(time),label="day")
-#
-#plt.legend(handles=[alle, yy, m, w, d])
-
-
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 
