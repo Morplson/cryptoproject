@@ -1,3 +1,5 @@
+import schedule
+import time
 import yfinance as yf
 import numpy as np
 import matplotlib.pyplot as plt
@@ -15,47 +17,35 @@ dlong = db["60d"]
 dshort = db["kd"]
 
 
-os.chdir(os.path.dirname(os.path.abspath(__file__)))
-
-
-names = ["BTC-USD","ETH-USD","XRP-USD","USDT-USD","BCH-USD","LTC-USD","BNB-USD","EOS-USD","XLM-USD","TRX-USD","ADA-USD","LINK-USD","XMR-USD","DASH-USD","ETC-USD","NEO-USD","XEM-USD","BAT-USD","DOGE-USD","ZEC-USD","ZRX-USD","GBYTE-USD","BNB-USD","GNO-USD","VERI-USD","DCR-USD","DGD-USD","REP-USD","BTG-USD","XZC-USD","ZEN-USD","MCO-USD","MLN-USD","FCT-USD","QTUM-USD","XUC-USD","BLOCK-USD","MONA-USD","PART-USD"] #
-#sys.exit()
-
-for name in names:
-	print(name)
-
-	startdate = datetime.datetime.now().date() - datetime.timedelta(days=5)
+def scraper():
 	
-	dump_file = open("crypto_datadump"+str(datetime.datetime.now().date())+".json-plus", "a")
+	names = ["BTC-USD","ETH-USD","XRP-USD","USDT-USD","BCH-USD","LTC-USD","BNB-USD","EOS-USD","XLM-USD","TRX-USD","ADA-USD","LINK-USD","XMR-USD","DASH-USD","ETC-USD","NEO-USD","XEM-USD","BAT-USD","DOGE-USD","ZEC-USD","ZRX-USD","GBYTE-USD","BNB-USD","GNO-USD","VERI-USD","DCR-USD","DGD-USD","REP-USD","BTG-USD","XZC-USD","ZEN-USD","MCO-USD","MLN-USD","FCT-USD","QTUM-USD","XUC-USD","BLOCK-USD","MONA-USD","PART-USD"] #
 	
+	for name in names:
+		print(name)
 	
-	for x in range(1,32):
-		print(startdate)
-	
+		startdate = datetime.datetime.now().date() - datetime.timedelta(days=5)
+		
+		today = datetime.datetime.now().date()
+		
+		
 		mon_start = startdate - datetime.timedelta(days=90)
 		week_end = startdate + datetime.timedelta(days=5)
-	
+
 		data_month = yf.download(name,start=mon_start,end=startdate,interval="60m")
 		data_week = yf.download(name,start=startdate,end=week_end,interval="5m")
-	
-		
-		values = data_month.Close.to_numpy().tolist()
-	
-		print (len(values))
-		
+
+		values = data_month.Close.to_numpy().tolist()		
 		y_data_arr = data_week.Close.to_numpy().tolist()
+
 		t_array = [x * 5 for x in range(len(y_data_arr))]
-	
+
 		trend = np.polyfit(t_array,y_data_arr,1)
 		trendpoly = np.poly1d(trend)
-	
+
 		d = trendpoly(0)
 		k = trendpoly(1)-d
-	
-		#print("{ "+str(d)+"; "+str(k)+"};")
-	
-	
-		
+
 		scrape_id = name+"@"+startdate.strftime('%m_%d_%Y')
 
 		sdate = datetime.datetime.combine(startdate, datetime.datetime.min.time())
@@ -64,9 +54,16 @@ for name in names:
 
 		dshort.insert_one({"scrape_id":scrape_id,"coin":name,"date":sdate,"values":{"k":k,"d":d}})
 
-	
-		startdate = startdate - datetime.timedelta(days=1)
-
 		plt.plot(t_array,trendpoly(t_array))
-	
+		
 
+
+
+
+schedule.every().day.at("12:00").do(scraper)
+
+if __name__ == '__main__':
+	print("start")
+	while True:
+		schedule.run_pending()
+		time.sleep(1)
