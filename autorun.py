@@ -1,4 +1,3 @@
-import schedule
 import time
 import yfinance as yf
 import numpy as np
@@ -9,17 +8,58 @@ import os, sys
 import pymongo #yDGTNy2WK52Bqsm
 
 
-client = pymongo.MongoClient("mongodb+srv://lol:yDGTNy2WK52Bqsm@cluster0-gijx9.mongodb.net/test?retryWrites=true&w=majority")
+client = pymongo.MongoClient("mongodb+srv://lol:yDGTNy2WK52Bqsm@cluster0-gijx9.mongodb.net/bcdata?retryWrites=true&w=majority")
 #db = client.test
 
 db = client["bcdata"]
+
 dlong = db["60d"]
 dshort = db["kd"]
 
 
 def scraper():
 	
-	names = ["BTC-USD","ETH-USD","XRP-USD","USDT-USD","BCH-USD","LTC-USD","BNB-USD","EOS-USD","XLM-USD","TRX-USD","ADA-USD","LINK-USD","XMR-USD","DASH-USD","ETC-USD","NEO-USD","XEM-USD","BAT-USD","DOGE-USD","ZEC-USD","ZRX-USD","GBYTE-USD","BNB-USD","GNO-USD","VERI-USD","DCR-USD","DGD-USD","REP-USD","BTG-USD","XZC-USD","ZEN-USD","MCO-USD","MLN-USD","FCT-USD","QTUM-USD","XUC-USD","BLOCK-USD","MONA-USD","PART-USD"] #
+	names = [
+		"BTC-USD",
+		"ETH-USD",
+		"XRP-USD",
+		"USDT-USD",
+		"BCH-USD",
+		"LTC-USD",
+		"BNB-USD",
+		"EOS-USD",
+		"XLM-USD",
+		"TRX-USD",
+		"ADA-USD",
+		"LINK-USD",
+		"XMR-USD",
+		"DASH-USD",
+		"ETC-USD",
+		"NEO-USD",
+		"XEM-USD",
+		"BAT-USD",
+		"DOGE-USD",
+		"ZEC-USD",
+		"ZRX-USD",
+		"GBYTE-USD",
+		"BNB-USD",
+		"GNO-USD",
+		"VERI-USD",
+		"DCR-USD",
+		"DGD-USD",
+		"REP-USD",
+		"BTG-USD",
+		"XZC-USD",
+		"ZEN-USD",
+		"MCO-USD",
+		"MLN-USD",
+		"FCT-USD",
+		"QTUM-USD",
+		"XUC-USD",
+		"BLOCK-USD",
+		"MONA-USD",
+		"PART-USD"
+		] #
 	
 	for name in names:
 		print(name)
@@ -55,15 +95,19 @@ def scraper():
 		dshort.insert_one({"scrape_id":scrape_id,"coin":name,"date":sdate,"values":{"k":k,"d":d}})
 
 		plt.plot(t_array,trendpoly(t_array))
+
+		
 		
 
 
 
 
-schedule.every().day.at("12:00").do(scraper)
+#schedule.every().day.at("12:00").do(scraper)
 
 if __name__ == '__main__':
-	print("start")
-	while True:
-		schedule.run_pending()
-		time.sleep(1)
+	print("ran scrape")
+	scraper()
+
+	#while True:
+		#schedule.run_pending()
+		#time.sleep(1)

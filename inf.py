@@ -2,12 +2,13 @@ import yfinance as yf
 import numpy as np
 import matplotlib.pyplot as plt
 import datetime
-import json
 import os, sys
 import pymongo #yDGTNy2WK52Bqsm
 
 
-client = pymongo.MongoClient("mongodb+srv://lol:yDGTNy2WK52Bqsm@cluster0-gijx9.mongodb.net/test?retryWrites=true&w=majority")
+client = pymongo.MongoClient("mongodb+srv://lol:yDGTNy2WK52Bqsm@cluster0-gijx9.mongodb.net/bcdata?retryWrites=true&w=majority")
+
+
 #db = client.test
 
 db = client["bcdata"]
@@ -29,7 +30,7 @@ for name in names:
 	dump_file = open("crypto_datadump"+str(datetime.datetime.now().date())+".json-plus", "a")
 	
 	
-	for x in range(1,32):
+	for x in range(32):
 		print(startdate)
 	
 		mon_start = startdate - datetime.timedelta(days=90)
