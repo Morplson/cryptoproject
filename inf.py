@@ -11,7 +11,7 @@ client = pymongo.MongoClient("mongodb+srv://lol:yDGTNy2WK52Bqsm@cluster0-gijx9.m
 
 #db = client.test
 
-db = client["bcdata"]
+db = client["test"]
 dlong = db["60d"]
 dshort = db["kd"]
 
@@ -69,5 +69,7 @@ for name in names:
 		startdate = startdate - datetime.timedelta(days=1)
 
 		plt.plot(t_array,trendpoly(t_array))
+
+		plt.show()
 	
 

@@ -1,6 +1,6 @@
-loader_size = 2600
+loader_size = 2500
 sample_length = 1000
-taining_epochs = 3
+taining_epochs = 9 
 test_size = 50
 
 
@@ -27,7 +27,6 @@ from matplotlib import pyplot
 import numpy as np
 import datetime
 import random
-import hashlib
 
 from sklearn.preprocessing import MinMaxScaler
 
@@ -37,7 +36,6 @@ import torch.nn.functional as F
 import torch.optim as optim
 
 from models import CumNet
-
 
 
 print(torch.cuda.is_available())
@@ -50,9 +48,6 @@ d_names = []
 for i in range(loader_size):
 
     if len(x_train_raw[i]["values"])>=sample_length:
-        #
-        # 
-        # print(x_train_raw[i]["scrape_id"])
         d_names.append(x_train_raw[i]["scrape_id"])
 
         x_train.append(x_train_raw[i]["values"][-sample_length:])   
@@ -80,55 +75,45 @@ def create_inout_sequences(data, prediction, id):
 
 inout_seq = create_inout_sequences(x_train_tensor, y_train_tensor, d_names)
 
-train_inout_seq = inout_seq[:-test_size]
-random.shuffle(train_inout_seq)
+
+test_inout_seq = inout_seq[-test_size:]
+random.shuffle(test_inout_seq)
 
 
 
 
 
 
-
-
-
-
-
-
+#### TESTING
 
 model = CumNet()
-loss_function = nn.MSELoss()
-optimizer = optim.Adam(model.parameters(), lr=0.001)
+model.load_state_dict(torch.load("D:\\xampp\\htdocs\\node\\cryptoproject\\models\\2020-06-09_38376011b3c85f1f47bf07b76917015a.pt"))
 
 
-print("start training")
+model.eval()
 
+for seq, rLable, title in test_inout_seq:
 
-for i in range(taining_epochs):
-    for seq, labels, name in train_inout_seq:
-        optimizer.zero_grad()
-        model.hidden_cell = (
+    with torch.no_grad():
+        model.hidden = (
             torch.zeros(1, 1, model.hidden_layer_size),
             torch.zeros(1, 1, model.hidden_layer_size)
         )
-
-        y_pred = model(seq)
-
-        single_loss = loss_function(y_pred, labels)
-        single_loss.backward()
-        optimizer.step()
-
-        print(f'epoch: {i:3} loss: {single_loss.item():10.12f}')
-
-print(f'epoch: {i:3} loss: {single_loss.item():10.12f}')
-
-print('Finished Training')
-
-#### Save State
+        gLable = model(seq).item()
 
 
-enc = str(random.randrange(0,10000000000000))
-hash = hashlib.md5(enc.encode('ascii','ignore')).hexdigest()
+        pyplot.title(title)
+        pyplot.ylabel('MONEY')
+        pyplot.grid(True)
+        pyplot.autoscale(axis='x', tight=True)
+        pyplot.plot(seq)
 
+        x = np.linspace(sample_length, sample_length+5*24)
+        real = rLable * (x-sample_length)/24 + seq[-1].item()
+        guess = gLable * (x-sample_length)/24 + seq[-1].item()
 
-date_str = datetime.datetime.now().date()
-torch.save(model.state_dict(), "D:\\xampp\\htdocs\\node\\cryptoproject\\models\\"+str(date_str)+"_"+str(hash)+".pt")
+        pyplot.plot(x,real)
+        pyplot.plot(x,guess)
+        
+        pyplot.legend(['GRAPH', 'Real', 'Guess'], loc=4)
+        pyplot.show()
