@@ -1,6 +1,6 @@
-loader_size = 2600
+loader_size = 3200
 sample_length = 1000
-taining_epochs = 3
+taining_epochs = 6
 test_size = 50
 
 
@@ -36,7 +36,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 
-from models import CumNet
+from models import WeekNet
 
 
 
@@ -95,7 +95,7 @@ random.shuffle(train_inout_seq)
 
 
 
-model = CumNet()
+model = WeekNet()
 loss_function = nn.MSELoss()
 optimizer = optim.Adam(model.parameters(), lr=0.001)
 
@@ -117,7 +117,7 @@ for i in range(taining_epochs):
         single_loss.backward()
         optimizer.step()
 
-        print(f'epoch: {i:3} loss: {single_loss.item():10.12f}')
+        print(f'epoch: {i:3} loss: {single_loss.item():10.8f} {name}')
 
 print(f'epoch: {i:3} loss: {single_loss.item():10.12f}')
 

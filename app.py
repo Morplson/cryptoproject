@@ -9,7 +9,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 
-from models import CumNet
+from models import WeekNet
 
 from pycoingecko import CoinGeckoAPI
 #cg = CoinGeckoAPI()
@@ -29,8 +29,8 @@ init()
 ### PREDICTER
 
 
-model = CumNet()
-model.load_state_dict(torch.load("D:\\xampp\\htdocs\\node\\cryptoproject\\models\\2020-06-09_38376011b3c85f1f47bf07b76917015a.pt"))
+model = WeekNet()
+model.load_state_dict(torch.load("D:\\xampp\\htdocs\\node\\cryptoproject\\models\\2020-06-12_52979a40801072d329c0454fc80c92a5.pt"))
 
 
 model.eval()
@@ -40,6 +40,12 @@ model.eval()
 
 ### AUSGABE
 def reader():
+
+    model.hidden = (
+        torch.zeros(1, 1, model.hidden_layer_size),
+        torch.zeros(1, 1, model.hidden_layer_size)
+    )
+
     name = input("Crypto: ")+"-USD"
 
     startdate = datetime.datetime.now()

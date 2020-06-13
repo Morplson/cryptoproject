@@ -1,4 +1,4 @@
-loader_size = 2500
+loader_size = 3200
 sample_length = 1000
 taining_epochs = 9 
 test_size = 50
@@ -35,7 +35,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 
-from models import CumNet
+from models import WeekNet
 
 
 print(torch.cuda.is_available())
@@ -86,8 +86,8 @@ random.shuffle(test_inout_seq)
 
 #### TESTING
 
-model = CumNet()
-model.load_state_dict(torch.load("D:\\xampp\\htdocs\\node\\cryptoproject\\models\\2020-06-09_38376011b3c85f1f47bf07b76917015a.pt"))
+model = WeekNet()
+model.load_state_dict(torch.load("D:\\xampp\\htdocs\\node\\cryptoproject\\models\\2020-06-12_52979a40801072d329c0454fc80c92a5.pt"))
 
 
 model.eval()
